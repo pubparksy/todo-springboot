@@ -36,7 +36,7 @@ public class UserController {
 
             UserEntity user = UserEntity.builder()
                     .username(userDTO.getUsername())
-                    .password(userDTO.getPassword())
+                    .password(passwordEncoder.encode(userDTO.getPassword()))
                     .build(); // builder로 저장할 유저 정보가 담긴 객체 생성
 
             UserEntity registeredUser = userService.create(user); // 유저 저장 후 객체 정보
