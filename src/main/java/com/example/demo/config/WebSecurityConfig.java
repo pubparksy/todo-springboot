@@ -30,8 +30,9 @@ public class WebSecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable()) // token 사용해서 basic인증 disable
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // session 기반이 아님을 선언
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/auth/**").permitAll() // /와 /auth/** 경로는 인증 안해도 됨.
-                        .anyRequest().authenticated() // /와 /auth/**이외의 모든 경로는 인증 해야됨.
+                    .requestMatchers("/", "/auth/**", "/error").permitAll()
+                    // /,  /auth/**,  /error 경로는 인증 안해도 됨. 인증되지 않은 유저에게도 error response를 보내고 login 화면으로 돌려야함.
+                    .anyRequest().authenticated() // /, /auth/**, /error 이외의 모든 경로는 인증 해야됨.
                 )
                 .addFilterAfter(jwtAuthenticationFilter, CorsFilter.class); // JWT 필터 등록
         // 책은 http.addFilterAfter()를 따로 호출했지만 메소드 체이닝으로 연결
