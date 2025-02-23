@@ -12,6 +12,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.filter.CorsFilter;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 @Slf4j
@@ -23,7 +25,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.disable()) // WebMvcConfig에서 설정했으므로 기본 CORS 설정
+                .cors(withDefaults()) // CORS 설정 활성화 (WebMvcConfig에서 설정한 CORS 정책이 적용)
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화 (람다를 메소드 참조로 변경)
                 .httpBasic(httpBasic -> httpBasic.disable()) // token 사용해서 basic인증 disable
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // session 기반이 아님을 선언
