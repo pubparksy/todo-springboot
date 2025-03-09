@@ -31,6 +31,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'
 
 	// https://mvnrepository.com/artifact/com.google.guava/guava
 	implementation group: 'com.google.guava', name: 'guava', version: '33.4.0-jre'
@@ -46,4 +47,27 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+// Release Task 추가
+tasks.register("release") {
+	// ./gradlew build를 먼저 실행하라
+	dependsOn tasks.named("build")
+	doLast {
+		def stdout = new ByteArrayOutputStream()
+		// exec - 커맨드 라인 프로세서; 파워셸/터미널에서 실행
+		exec {
+			commandLine 'eb', 'setenv', 'SPRING_PROFILES_ACTIVE=prod'
+			standardOutput = stdout
+			ignoreExitValue = true // 실패해도 계속 실행
+		}
+		println "eb setenv SPRING_PROFILES_ACTIVE=prod :\n$stdout"
+		exec {
+			commandLine 'eb', 'deploy'
+			standardOutput = stdout
+		}
+		// 결과 로깅을 위한 작업
+		println "eb deploy :\n$stdout"
+		println "Release succeeded."
+	}
 }
