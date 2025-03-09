@@ -31,7 +31,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	runtimeOnly 'mysql:mysql-connector-java'
+	runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'
 
 	// https://mvnrepository.com/artifact/com.google.guava/guava
 	implementation group: 'com.google.guava', name: 'guava', version: '33.4.0-jre'
